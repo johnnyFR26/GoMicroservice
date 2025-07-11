@@ -9,7 +9,9 @@ import (
 	"syscall"
 
 	"github.com/gorilla/mux"
+	"github.com/johnnyFR26/GoMicroservice/internal/api"
 	"github.com/johnnyFR26/GoMicroservice/internal/config"
+	"github.com/johnnyFR26/GoMicroservice/internal/service"
 	"github.com/johnnyFR26/GoMicroservice/pkg/model"
 
 	"gorm.io/driver/postgres"
@@ -35,12 +37,11 @@ func main() {
 		_, _ = w.Write([]byte(`{"status": "ok"}`))
 	}).Methods("GET")
 
-	// 🔹 Aqui depois você pode adicionar seu middleware e rotas protegidas
-	// Exemplo:
-	// apiKeyRepo := repository.NewAPIKeyRepository(db)
-	// api := r.PathPrefix("/api").Subrouter()
-	// api.Use(middleware.APIKeyAuth(apiKeyRepo))
-	// api.HandleFunc("/convert", convertHandler).Methods("POST")
+	converter := service.NewConverterService(cfg.ExchangeAPIKey)
+	convertHandler := api.NewConvertHandler(converter)
+
+	api := r.PathPrefix("/api").Subrouter()
+	api.HandleFunc("/convert", convertHandler.HandleConvert).Methods("POST")
 
 	port := cfg.Port
 	srv := &http.Server{
