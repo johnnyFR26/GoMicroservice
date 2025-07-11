@@ -1,0 +1,9 @@
+POST http://localhost:8080/api/convert
+Content-Type: application/json
+X-API-Key: sua-chave-valida
+
+{
+  "amount": 100,
+  "from": "USD",
+  "to": "BRL"
+}
