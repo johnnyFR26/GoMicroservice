@@ -11,7 +11,7 @@ import (
 
 type ConverterService struct {
 	APIKey string
-	Cache  sync.Map // key: "USD->BRL" | value: cachedRate
+	Cache  sync.Map
 	TTL    time.Duration
 }
 
